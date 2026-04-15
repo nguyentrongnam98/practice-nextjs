@@ -10,12 +10,19 @@ export const metadata: Metadata = {
   description: 'Built with Next.js Feature Slices Architecture',
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+  auth,
+}: {
+  children: React.ReactNode
+  auth: React.ReactNode
+}) {
   return (
     <html lang="en">
       <body className={`${inter.variable} font-sans antialiased`}>
         <AppProviders>
           {children}
+          {auth}
         </AppProviders>
       </body>
     </html>
