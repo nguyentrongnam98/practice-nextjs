@@ -1,8 +1,15 @@
 'use client'
 
-console.log('🌐 ClientInfo rendered on BROWSER at', new Date().toISOString())
+import { useState, useEffect } from 'react'
 
 export function ClientInfo() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    console.log('🌐 ClientInfo rendered on BROWSER at', new Date().toISOString())
+    setMounted(true)
+  }, [])
+
   return (
     <div className="rounded-lg border-2 border-orange-300 bg-orange-50 p-4">
       <div className="flex items-center gap-2">
@@ -14,20 +21,26 @@ export function ClientInfo() {
       <dl className="mt-3 space-y-1 text-sm">
         <div className="flex gap-2">
           <dt className="text-orange-700">typeof window:</dt>
-          <dd className="font-mono">{typeof window}</dd>
+          <dd className="font-mono">{mounted ? typeof window : 'undefined (SSR)'}</dd>
         </div>
         <div className="flex gap-2">
           <dt className="text-orange-700">navigator.userAgent:</dt>
           <dd className="font-mono truncate max-w-xs">
-            {typeof navigator !== 'undefined'
+            {mounted
               ? navigator.userAgent.slice(0, 50) + '...'
-              : 'N/A (SSR)'}
+              : 'Loading... (SSR)'}
           </dd>
         </div>
       </dl>
       <p className="mt-3 text-xs text-orange-600">
         Check your <strong>browser DevTools</strong> console for the log message.
       </p>
+      {mounted && (
+        <p className="mt-2 rounded bg-orange-100 p-2 text-xs text-orange-800">
+          Values above updated after hydration via <code>useEffect</code> —
+          this is how you avoid hydration mismatch with browser-only values.
+        </p>
+      )}
     </div>
   )
 }
