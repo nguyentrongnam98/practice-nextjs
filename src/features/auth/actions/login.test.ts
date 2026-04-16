@@ -9,11 +9,20 @@ vi.mock('next/cache', () => ({
   revalidatePath: vi.fn(),
 }))
 
+const redirectMock = vi.fn()
+vi.mock('next/navigation', () => ({
+  redirect: (...args: unknown[]) => {
+    redirectMock(...args)
+    throw new Error('NEXT_REDIRECT')
+  },
+}))
+
 import { login } from './login'
 
 describe('login action', () => {
   beforeEach(() => {
     cookieSet.mockReset()
+    redirectMock.mockReset()
   })
 
   it('returns fieldErrors for invalid email', async () => {
@@ -52,13 +61,13 @@ describe('login action', () => {
     }
   })
 
-  it('returns success for valid credentials', async () => {
+  it('redirects to /dashboard on valid credentials', async () => {
     const formData = new FormData()
     formData.set('email', 'demo@example.com')
     formData.set('password', 'password123')
 
-    const result = await login(formData)
-    expect(result.success).toBe(true)
+    await login(formData).catch(() => {})
+    expect(redirectMock).toHaveBeenCalledWith('/dashboard')
   })
 
   it('sets role=user cookie on successful login with non-admin email', async () => {
@@ -66,7 +75,7 @@ describe('login action', () => {
     formData.set('email', 'demo@example.com')
     formData.set('password', 'password123')
 
-    await login(formData)
+    await login(formData).catch(() => {})
     expect(cookieSet).toHaveBeenCalledWith(
       'role',
       'user',

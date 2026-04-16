@@ -2,6 +2,7 @@
 
 import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 import type { ActionResult } from '@/shared/types/api'
 import { loginSchema } from '../schemas/login.schema'
 import { authenticate } from '../services/auth.service'
@@ -31,6 +32,5 @@ export async function login(formData: FormData): Promise<ActionResult> {
     maxAge: 60 * 60 * 24 * 7,
   })
   revalidatePath('/dashboard', 'layout')
-
-  return { success: true, data: undefined }
+  redirect('/dashboard')
 }
