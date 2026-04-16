@@ -4,10 +4,19 @@ import { ExerciseLayout } from '../../rsc/_components/ExerciseLayout'
 import { ThemeToggle } from './_components/ThemeToggle'
 import { ThemedContent } from './_components/ThemedContent'
 
-export default async function RuntimeExercise() {
+async function RuntimeContent() {
   const c = await cookies()
   const theme = c.get('theme')?.value ?? 'light'
 
+  return (
+    <div className="space-y-4">
+      <ThemeToggle current={theme} />
+      <ThemedContent theme={theme} />
+    </div>
+  )
+}
+
+export default function RuntimeExercise() {
   return (
     <ExerciseLayout
       number="05"
@@ -19,12 +28,9 @@ export default async function RuntimeExercise() {
         'Why does the component that reads cookies need to be wrapped in Suspense?',
       ]}
     >
-      <div className="space-y-4">
-        <ThemeToggle current={theme} />
-        <Suspense fallback={<div className="animate-pulse h-40 rounded bg-gray-100" />}>
-          <ThemedContent theme={theme} />
-        </Suspense>
-      </div>
+      <Suspense fallback={<div className="animate-pulse h-40 rounded bg-gray-100" />}>
+        <RuntimeContent />
+      </Suspense>
     </ExerciseLayout>
   )
 }

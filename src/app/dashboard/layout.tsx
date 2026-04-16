@@ -1,7 +1,18 @@
+import { Suspense } from 'react'
 import { getRole } from '@/features/auth/helpers/role'
 import { RoleSwitcher } from './_components/RoleSwitcher'
 
-export default async function DashboardLayout({
+async function NavBar() {
+  const role = await getRole()
+  return (
+    <nav className="flex items-center border-b bg-white px-6 py-4">
+      <span className="font-semibold">Dashboard</span>
+      <RoleSwitcher current={role} />
+    </nav>
+  )
+}
+
+export default function DashboardLayout({
   children,
   analytics,
   team,
@@ -12,19 +23,21 @@ export default async function DashboardLayout({
   team: React.ReactNode
   modal: React.ReactNode
 }) {
-  const role = await getRole()
   return (
     <div className="min-h-screen bg-gray-50">
-      <nav className="flex items-center border-b bg-white px-6 py-4">
-        <span className="font-semibold">Dashboard</span>
-        <RoleSwitcher current={role} />
-      </nav>
+      <Suspense fallback={
+        <nav className="flex items-center border-b bg-white px-6 py-4">
+          <span className="font-semibold">Dashboard</span>
+        </nav>
+      }>
+        <NavBar />
+      </Suspense>
       <div className="grid gap-6 p-6 lg:grid-cols-3">
         <section className="lg:col-span-2">{children}</section>
         <aside className="space-y-4">{analytics}</aside>
         <aside className="space-y-4">{team}</aside>
       </div>
-      {modal}
+      <Suspense>{modal}</Suspense>
     </div>
   )
 }

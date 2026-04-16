@@ -1,6 +1,9 @@
+import { connection } from 'next/server'
+
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms))
 
 export async function SlowerSection() {
+  await connection()
   const start = Date.now()
   await sleep(1500)
   const elapsed = Date.now() - start

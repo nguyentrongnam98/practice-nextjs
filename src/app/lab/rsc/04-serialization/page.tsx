@@ -1,7 +1,9 @@
+import { connection } from 'next/server'
 import { ExerciseLayout } from '../_components/ExerciseLayout'
 import { DataDisplay } from './_components/DataDisplay'
 
-export default function SerializationExercise() {
+export default async function SerializationExercise() {
+  await connection()
   const now = new Date()
 
   return (

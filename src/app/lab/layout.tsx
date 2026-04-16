@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import Link from 'next/link'
 
 export default function LabLayout({ children }: { children: React.ReactNode }) {
@@ -9,7 +10,9 @@ export default function LabLayout({ children }: { children: React.ReactNode }) {
           Home
         </Link>
       </header>
-      <div className="mx-auto max-w-4xl p-6">{children}</div>
+      <div className="mx-auto max-w-4xl p-6">
+        <Suspense>{children}</Suspense>
+      </div>
     </div>
   )
 }

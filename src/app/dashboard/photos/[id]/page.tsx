@@ -7,6 +7,10 @@ const PHOTOS: Record<string, { color: string; title: string; description: string
   '6': { color: 'bg-pink-400', title: 'Cherry Blossom', description: 'Delicate cherry blossoms in full bloom during spring.' },
 }
 
+export function generateStaticParams() {
+  return Object.keys(PHOTOS).map((id) => ({ id }))
+}
+
 export default async function PhotoDetailPage({
   params,
 }: {

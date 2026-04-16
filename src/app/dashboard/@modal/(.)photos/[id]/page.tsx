@@ -1,3 +1,4 @@
+import { connection } from 'next/server'
 import { Modal } from '@/shared/components/feedback'
 
 const PHOTOS: Record<string, { color: string; title: string; description: string }> = {
@@ -14,6 +15,7 @@ export default async function PhotoModalPage({
 }: {
   params: Promise<{ id: string }>
 }) {
+  await connection()
   const { id } = await params
   const photo = PHOTOS[id]
 
