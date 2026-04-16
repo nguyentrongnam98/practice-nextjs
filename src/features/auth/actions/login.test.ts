@@ -1,7 +1,17 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+
+const cookieSet = vi.fn()
+vi.mock('next/headers', () => ({
+  cookies: async () => ({ set: cookieSet, get: () => undefined }),
+}))
+
 import { login } from './login'
 
 describe('login action', () => {
+  beforeEach(() => {
+    cookieSet.mockReset()
+  })
+
   it('returns fieldErrors for invalid email', async () => {
     const formData = new FormData()
     formData.set('email', 'not-an-email')
@@ -45,5 +55,27 @@ describe('login action', () => {
 
     const result = await login(formData)
     expect(result.success).toBe(true)
+  })
+
+  it('sets role=user cookie on successful login with non-admin email', async () => {
+    const formData = new FormData()
+    formData.set('email', 'demo@example.com')
+    formData.set('password', 'password123')
+
+    await login(formData)
+    expect(cookieSet).toHaveBeenCalledWith(
+      'role',
+      'user',
+      expect.objectContaining({ path: '/' }),
+    )
+  })
+
+  it('does not set cookie on failed login', async () => {
+    const formData = new FormData()
+    formData.set('email', 'admin@example.com')
+    formData.set('password', 'password123')
+
+    await login(formData)
+    expect(cookieSet).not.toHaveBeenCalled()
   })
 })
