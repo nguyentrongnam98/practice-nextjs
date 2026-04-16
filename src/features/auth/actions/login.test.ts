@@ -5,6 +5,10 @@ vi.mock('next/headers', () => ({
   cookies: async () => ({ set: cookieSet, get: () => undefined }),
 }))
 
+vi.mock('next/cache', () => ({
+  revalidatePath: vi.fn(),
+}))
+
 import { login } from './login'
 
 describe('login action', () => {
