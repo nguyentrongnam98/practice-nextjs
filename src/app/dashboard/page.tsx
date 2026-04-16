@@ -18,6 +18,9 @@ export default function DashboardPage() {
         <Link href="/login" className="text-blue-600 hover:underline">
           Open Login Modal
         </Link>
+        <Link href="/dashboard/photos" className="text-blue-600 hover:underline">
+          Photo Gallery
+        </Link>
       </div>
     </div>
   )

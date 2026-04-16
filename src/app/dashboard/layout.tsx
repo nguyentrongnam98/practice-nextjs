@@ -5,10 +5,12 @@ export default async function DashboardLayout({
   children,
   analytics,
   team,
+  modal,
 }: {
   children: React.ReactNode
   analytics: React.ReactNode
   team: React.ReactNode
+  modal: React.ReactNode
 }) {
   const role = await getRole()
   return (
@@ -22,6 +24,7 @@ export default async function DashboardLayout({
         <aside className="space-y-4">{analytics}</aside>
         <aside className="space-y-4">{team}</aside>
       </div>
+      {modal}
     </div>
   )
 }
