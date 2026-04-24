@@ -13,7 +13,7 @@ export async function ShortLived() {
         <h3 className="font-semibold text-green-900">seconds</h3>
         <span className="text-xs text-green-600">{new Date().toISOString()}</span>
       </div>
-      <p className="mt-2 text-sm italic text-green-800">"{quote.quote}"</p>
+      <p className="mt-2 text-sm italic text-green-800">&ldquo;{quote.quote}&rdquo;</p>
       <p className="mt-1 text-xs text-green-600">— {quote.author}</p>
       <p className="mt-2 rounded bg-green-100 p-1 text-xs text-green-700">
         stale: 0 | revalidate: 1s | expire: 60s

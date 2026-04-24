@@ -4,8 +4,10 @@ const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms))
 
 export async function SlowSection() {
   await connection()
+  // eslint-disable-next-line react-hooks/purity -- intentional: measuring streaming timing for demo
   const start = Date.now()
   await sleep(500)
+  // eslint-disable-next-line react-hooks/purity -- intentional: measuring streaming timing for demo
   const elapsed = Date.now() - start
 
   console.log(`⚡ SlowSection resolved in ${elapsed}ms`)

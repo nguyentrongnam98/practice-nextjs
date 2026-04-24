@@ -13,7 +13,7 @@ export async function FreshSection() {
       </div>
       <p className="mt-2 text-sm">{product.title} — ${product.price}</p>
       <p className="mt-2 rounded bg-orange-100 p-1 text-xs text-orange-700">
-        No 'use cache'. Fetches every request. Streamed via Suspense. Timestamp changes every refresh.
+        No &apos;use cache&apos;. Fetches every request. Streamed via Suspense. Timestamp changes every refresh.
       </p>
     </div>
   )

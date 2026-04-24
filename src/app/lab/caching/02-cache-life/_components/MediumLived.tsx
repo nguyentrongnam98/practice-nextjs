@@ -13,7 +13,7 @@ export async function MediumLived() {
         <h3 className="font-semibold text-amber-900">minutes</h3>
         <span className="text-xs text-amber-600">{new Date().toISOString()}</span>
       </div>
-      <p className="mt-2 text-sm italic text-amber-800">"{quote.quote}"</p>
+      <p className="mt-2 text-sm italic text-amber-800">&ldquo;{quote.quote}&rdquo;</p>
       <p className="mt-1 text-xs text-amber-600">— {quote.author}</p>
       <p className="mt-2 rounded bg-amber-100 p-1 text-xs text-amber-700">
         stale: 5m | revalidate: 1m | expire: 1h

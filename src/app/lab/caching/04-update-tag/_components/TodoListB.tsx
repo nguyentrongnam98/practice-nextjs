@@ -5,6 +5,7 @@ export async function TodoListB() {
   cacheLife('hours')
   cacheTag('lab-todos-b')
 
+  // eslint-disable-next-line react-hooks/purity -- intentional: randomness demonstrates cache hit (same result served from cache)
   const res = await fetch('https://dummyjson.com/todos?limit=3&skip=' + Math.floor(Math.random() * 20))
   const { todos } = await res.json()
 

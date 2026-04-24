@@ -26,13 +26,13 @@ export async function ThemedContent({ theme }: ThemedContentProps) {
         </span>
       </div>
       <p className={`mt-3 text-sm italic ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-        "{data.quote}"
+        &ldquo;{data.quote}&rdquo;
       </p>
       <p className={`mt-1 text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
         — {data.author}
       </p>
       <p className={`mt-3 rounded p-2 text-xs ${isDark ? 'bg-gray-800 text-gray-400' : 'bg-blue-50 text-blue-700'}`}>
-        theme="{data.theme}" is part of the cache key. Switch theme → different cache entry → different quote.
+        theme=&ldquo;{data.theme}&rdquo; is part of the cache key. Switch theme → different cache entry → different quote.
         Switch back → same quote (cache hit!).
       </p>
     </div>
