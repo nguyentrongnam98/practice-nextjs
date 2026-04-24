@@ -15,7 +15,7 @@ export async function CachedSection() {
       </div>
       <p className="mt-2 text-sm">{product.title} — ${product.price}</p>
       <p className="mt-2 rounded bg-green-100 p-1 text-xs text-green-700">
-        Uses 'use cache' + cacheLife('hours'). Appears instantly from cache. Timestamp stays same on refresh.
+        Uses &apos;use cache&apos; + cacheLife(&apos;hours&apos;). Appears instantly from cache. Timestamp stays same on refresh.
       </p>
     </div>
   )

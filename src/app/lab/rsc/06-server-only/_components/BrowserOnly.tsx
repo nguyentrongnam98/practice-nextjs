@@ -7,6 +7,7 @@ export function BrowserOnly() {
   const [userAgent, setUserAgent] = useState<string | null>(null)
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: reading browser-only API after hydration
     setUserAgent(navigator.userAgent)
   }, [])
 

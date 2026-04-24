@@ -13,7 +13,7 @@ export async function LongLived() {
         <h3 className="font-semibold text-red-900">hours</h3>
         <span className="text-xs text-red-600">{new Date().toISOString()}</span>
       </div>
-      <p className="mt-2 text-sm italic text-red-800">"{quote.quote}"</p>
+      <p className="mt-2 text-sm italic text-red-800">&ldquo;{quote.quote}&rdquo;</p>
       <p className="mt-1 text-xs text-red-600">— {quote.author}</p>
       <p className="mt-2 rounded bg-red-100 p-1 text-xs text-red-700">
         stale: 5m | revalidate: 1h | expire: 1d

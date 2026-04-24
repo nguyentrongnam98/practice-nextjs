@@ -7,6 +7,7 @@ export function ClientInfo() {
 
   useEffect(() => {
     console.log('🌐 ClientInfo rendered on BROWSER at', new Date().toISOString())
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: avoid hydration mismatch by deferring browser-only render
     setMounted(true)
   }, [])
 
