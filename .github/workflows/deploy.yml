@@ -1,0 +1,87 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    name: Build, push to ECR, deploy to EC2
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@1629cc33a9521f764a4704d4d0387513918873b9 # v2.1.4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
+
+      - name: Build and push image
+        uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25 # v5.4.0
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ${{ steps.ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
+            ${{ steps.ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
+
+      - name: Deploy to EC2 over SSH
+        uses: appleboy/ssh-action@0ff4204d59e8e51228ff73bce53f80d53301dee2 # v1.2.5
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e
+            REGION="${{ secrets.AWS_REGION }}"
+            REGISTRY="${{ steps.ecr.outputs.registry }}"
+            IMAGE="$REGISTRY/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}"
+
+            echo "==> Logging into ECR (using EC2 instance role)..."
+            aws ecr get-login-password --region "$REGION" | docker login --username AWS --password-stdin "$REGISTRY"
+
+            echo "==> Pulling image $IMAGE..."
+            docker pull "$IMAGE"
+
+            echo "==> Stopping old container if exists..."
+            docker stop app 2>/dev/null || true
+            docker rm   app 2>/dev/null || true
+
+            echo "==> Starting new container..."
+            docker run -d --name app -p 3000:3000 --restart unless-stopped "$IMAGE"
+
+            echo "==> Waiting 5s for app to boot..."
+            sleep 5
+
+            echo "==> Health check..."
+            if curl -fsS http://localhost:3000 > /dev/null; then
+              echo "✅ App is up!"
+            else
+              echo "❌ App did not respond on :3000"
+              docker logs app
+              exit 1
+            fi
+
+            echo "==> Cleaning up dangling images older than 24h..."
+            docker image prune -af --filter "until=24h" || true
