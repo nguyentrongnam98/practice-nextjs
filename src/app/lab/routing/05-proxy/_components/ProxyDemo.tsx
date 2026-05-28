@@ -1,16 +1,17 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/shared/components/ui'
 
-export function ProxyDemo() {
-  const [authed, setAuthed] = useState(false)
-  const [headers, setHeaders] = useState<string | null>(null)
+function readAuthCookie() {
+  if (typeof document === 'undefined') return false
+  return document.cookie.split('; ').some((c) => c.startsWith('lab-auth=1'))
+}
 
-  useEffect(() => {
-    setAuthed(document.cookie.split('; ').some((c) => c.startsWith('lab-auth=1')))
-  }, [])
+export function ProxyDemo() {
+  const [authed, setAuthed] = useState<boolean>(readAuthCookie)
+  const [headers, setHeaders] = useState<string | null>(null)
 
   function setCookie() {
     document.cookie = 'lab-auth=1; path=/lab/routing/05-proxy; max-age=3600'

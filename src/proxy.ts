@@ -6,6 +6,10 @@ const LAB_PREFIX = '/lab/routing/05-proxy'
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
+  // Auth guard for dashboard routes — extend when auth provider is integrated
+  // (previously in middleware.ts, merged here for Next.js 16 compatibility)
+  // When a real auth provider is added, check for session cookie and redirect to /login if missing.
+
   // 1. Rewrite: /lab/routing/05-proxy/rewrite → /lab/routing/05-proxy/original (URL stays)
   if (pathname === `${LAB_PREFIX}/rewrite`) {
     const url = request.nextUrl.clone()
@@ -31,5 +35,6 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/lab/routing/05-proxy/:path*'],
+  // Covers both the lab proxy routes and the dashboard auth guard
+  matcher: ['/lab/routing/05-proxy/:path*', '/dashboard/:path*'],
 }
