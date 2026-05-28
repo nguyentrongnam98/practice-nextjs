@@ -16,7 +16,7 @@ export default function FormStatusExercise() {
       ]}
     >
       <p className="mb-4 text-sm text-gray-600">
-        The form takes 1.5s to "subscribe". Note: the form itself is a Server Component — only the submit
+        The form takes 1.5s to &ldquo;subscribe&rdquo;. Note: the form itself is a Server Component — only the submit
         button is a Client Component. Open the server terminal to see the logged email.
       </p>
       <SubscribeForm />

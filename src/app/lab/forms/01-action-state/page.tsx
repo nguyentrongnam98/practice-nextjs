@@ -17,7 +17,7 @@ export default function ActionStateExercise() {
     >
       <p className="mb-4 text-sm text-gray-600">
         Submit the form with an empty field to see the error state. Submit with values to see the success
-        state. Watch the button label flip to "Sending…" during the 700ms server delay.
+        state. Watch the button label flip to &ldquo;Sending…&rdquo; during the 700ms server delay.
       </p>
       <ContactForm />
     </ExerciseLayout>

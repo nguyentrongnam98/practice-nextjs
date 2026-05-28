@@ -18,7 +18,7 @@ export default function OptimisticExercise() {
       ]}
     >
       <p className="mb-4 text-sm text-gray-600">
-        Send a message — it appears <em>instantly</em> in yellow ("sending…") even though the server takes
+        Send a message — it appears <em>instantly</em> in yellow (&ldquo;sending…&rdquo;) even though the server takes
         1.5s. When the action completes and the page revalidates, it turns white (confirmed).
       </p>
       <MessageBoard messages={messages} />
