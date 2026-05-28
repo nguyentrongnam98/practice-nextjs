@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 export default function Chart() {
   const [now, setNow] = useState<string | null>(null)
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setNow(new Date().toLocaleTimeString())
   }, [])
 
